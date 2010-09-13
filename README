@@ -1,0 +1,39 @@
+CrawlCL is a command line tool to crawl web pages using javascript and jquery. CrawlCL
+uses node.js, including the modules request and jsdom.  It's based on this article by
+Charlie Robbins:  http://blog.nodejitsu.com/jsdom-jquery-in-5-lines-on-nodejs .
+
+To use crawlcl, you need to specify the page you want to crawl, the Sizzle.js/JQuery style
+CSS selector, and optionally a javascript file that will be executed for each result
+(The default action is to write out the href of each result).
+
+Here's a simple example for parsing http://news.ycombinator.com/ and retrieving 
+some info about each of the results.
+
+To execute this query:
+
+./crawlcl http://news.ycombinator.com ".title a" sample.js
+
+The sample.js contains the following:
+
+if(node.href.substring(0,3) != "/x?"){ // remove the "More" link
+    console.log("Title: " + $(node).text());
+    console.log("HREF: " + node.href);
+    // Ugly but it works
+    var score = $(node).parent().parent().next().find('span');
+    console.log("Score: " + score.text());
+    console.log("Author: " + score.next().text());
+}
+
+To install crawlcl, you need to do the following:
+
+1) Install node.js from http://nodejs.org/
+2) Install the request and jsdom modules.  The easiest way
+to do this is to use NPM (http://npmjs.org/).  If installed,
+just type:
+
+npm install request jsdom
+
+3) At this point, you should be good to go.  I've included the
+sample.js file so you can try it with the above example query.
+
+
